@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+    <form class='contain' method="POST">
+    {{ form.hidden_tag() }}
+        {% if current_user.is_authenticated %}
+            {% if form.username.errors %}
+                {{ form.username(class="form-control form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.username.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.username(class="form-control form-control") }}
+            {% endif %}
+
+            {% if form.submit.errors %}
+                {{ form.submit(class="form-control form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.submit.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.submit(class="btn btn-primary btn-block") }}
+            {% endif %}
+        {% endif %}
+    </form>
+</div>
+
+    {% for post in posts %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile/' + post.author.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+               <b><a class="mr-1  text-primary" href="{{ url_for('view_user', username=post.author.username) }}">{{post.author.username}}</a></b>
+              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+            <a class="article-title text-dark" href="{{ url_for('post', post_id=post.id) }}"><h7 class="article-content">{{ post.content }}</h7></a>
+          </div>
+        </article>
+        <hr color='white'>
+    {% endfor %}
+{% endblock %}

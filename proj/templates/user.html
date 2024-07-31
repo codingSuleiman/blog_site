@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="content-section text-monospace">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <h2 class="text-center text-dark">Employee {{ form.userid.data.upper() }}</h2>
+     {% for post in posts %}
+         {% if post %}
+             <div class="card text-center">
+                 <div class='text-light bg-dark'>
+                     {{ post[0]+':' }} {{ post[1] }}
+                 </div>   
+             </div>
+         {% endif %}
+         {% else %}
+             <div class="text-center">
+                 <div class='text-dark bg-light'>
+                     No data
+                 </div>
+             </div>
+    {% endfor %}
+                {{ form.userid.label }}
+                <div class="form-group">
+                    {% if form.userid.errors %}
+                        {{ form.userid(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.userid.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.userid(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary btn-lg btn-block text-white") }}
+            </div>
+ 
+        </form>       
+                      
+    </div>
+
+{% endblock %}
