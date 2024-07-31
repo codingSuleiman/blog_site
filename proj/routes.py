@@ -8,12 +8,13 @@ import secrets
 import os
 import random
 
-    
 @app.route('/')
 @app.route('/home', methods=['POST', 'GET'])
 def home():
     posts = Post.query.all()
     form = SearchForm()
+    if not session.get('name'):
+        return redirect(url_for('login'))
     if form.validate_on_submit():
         return redirect(url_for('view_user',username=form.username.data))
     return render_template('home.html', posts=posts[::-1], form=form)
@@ -37,6 +38,8 @@ def login():
             if form.password.data == user.password:
                 login_user(user, remember=form.remember.data)
                 flash('login successful', 'success')
+                session['name'] = form.email.data
+                print(session.values())
                 return redirect(url_for('home'))           
             else:
                 flash('Invalid password', 'danger')
@@ -64,6 +67,7 @@ def register():
 @app.route('/logout')
 def logout():
     flash('logout successful!','warning')
+    session['name'] = None
     logout_user()
     return redirect(url_for('home'))
     
